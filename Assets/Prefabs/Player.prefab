@@ -131,10 +131,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: acaf0c0320529cb479d7e6c178cf3939, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 5
-  swimSpeed: 2
+  moveSpeed: 7
+  swimSpeed: 8
   accelInWater: 10
-  waterDrag: 3
+  waterDrag: 2
   normalDrag: 0
   buoyancyK: 8
   buoyancyDamping: 3
