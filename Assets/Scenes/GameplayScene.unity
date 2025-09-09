@@ -131,7 +131,7 @@ GameObject:
   - component: {fileID: 83268197}
   - component: {fileID: 83268199}
   m_Layer: 0
-  m_Name: Boat
+  m_Name: Square
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -265,7 +265,7 @@ GameObject:
   - component: {fileID: 448459508}
   - component: {fileID: 448459507}
   m_Layer: 0
-  m_Name: BorderLeft
+  m_Name: Square (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -617,7 +617,7 @@ GameObject:
   - component: {fileID: 1539427140}
   - component: {fileID: 1539427139}
   m_Layer: 0
-  m_Name: Seabed
+  m_Name: Square (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -838,7 +838,7 @@ GameObject:
   - component: {fileID: 2034538823}
   - component: {fileID: 2034538822}
   m_Layer: 0
-  m_Name: BorderRight
+  m_Name: Square (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
