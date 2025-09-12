@@ -134,14 +134,19 @@ MonoBehaviour:
   moveSpeed: 7
   swimSpeed: 8
   accelInWater: 10
+  carriedWeight: 0
+  weightImpactFactor: 1
+  harpoonPrefab: {fileID: 0}
+  harpoonSpawnPoint: {fileID: 0}
+  harpoonSpeed: 10
   waterDrag: 2
   normalDrag: 0
   buoyancyK: 8
   buoyancyDamping: 3
   maxBuoyancyForce: 12
-  sinkDuration: 0.6
-  initialSinkForce: 2
-  buoyancyRampTime: 0.8
+  sinkDuration: 1
+  initialSinkForce: 10
+  buoyancyRampTime: 1
   splashEffectPrefab: {fileID: 0}
 --- !u!114 &-7509507574921182367
 MonoBehaviour:
@@ -184,6 +189,26 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 6364f6ea-94eb-46c7-a825-d7f881386d64
     m_ActionName: 'Player/Move[/Keyboard/w,/Keyboard/s,/Keyboard/a,/Keyboard/d]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: cfccd415-d3bf-42f5-8f91-45d5e8844f63
+    m_ActionName: 'Player/Interaction[/Keyboard/e]'
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 804792739680659552}
+        m_TargetAssemblyTypeName: PlayerBehaviour, Assembly-CSharp
+        m_MethodName: OnFireHarpoon
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: e159065d-7727-4f95-b514-b153f1a744d0
+    m_ActionName: 'Player/Attack[/Mouse/leftButton,/Keyboard/space]'
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
