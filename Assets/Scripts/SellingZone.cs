@@ -1,41 +1,91 @@
 using UnityEngine;
 
-public class SellZoneTrigger : MonoBehaviour
+[RequireComponent(typeof(Collider2D))]
+public class SellMenu : MonoBehaviour
 {
-    public GameObject sellMenuUI; // Assegna il Canvas del menu di vendita da Inspector
-    private bool playerInZone = false;
+    [Header("Riferimenti")]
+    [SerializeField] private GameObject menuRoot;     // Assegna qui il pannello/menu da mostrare
+    [SerializeField] private PlayerBehaviour player;   // Riferimento allo script del giocatore
+    [SerializeField] private GameObject playerInventory;
 
-    void Start()
+    [Header("Impostazioni")]
+    [SerializeField] private string playerTag = "Player";
+    [SerializeField] private KeyCode openKey = KeyCode.I;
+    [SerializeField] private bool toggleWithSameKey = true;  // Premi I per aprire/chiudere
+    [SerializeField] private bool closeWhenExitZone = true;  // Chiudi il menu quando esci dalla zona
+
+    private bool playerInside;
+    public bool isOpen;
+   
+
+    private void Reset()
     {
-        if (sellMenuUI != null)
-            sellMenuUI.SetActive(false); // Assicurati che il menu sia nascosto all'inizio
+        // Assicura che il collider sia un trigger
+        var col = GetComponent<Collider2D>();
+        col.isTrigger = true;
     }
 
-    void OnTriggerEnter(Collider other)
+    private void Awake()
     {
-        if (other.CompareTag("Player"))
+        if (menuRoot != null) menuRoot.SetActive(false);
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag(playerTag))
         {
-            playerInZone = true;
-            Debug.Log("Il giocatore è nella zona di vendita.");
+            playerInside = true;
         }
     }
 
-    void OnTriggerExit(Collider other)
+    private void OnTriggerExit2D(Collider2D other)
     {
-        if (other.CompareTag("Player"))
+        if (other.CompareTag(playerTag))
         {
-            playerInZone = false;
-            if (sellMenuUI != null)
-                sellMenuUI.SetActive(false); // Chiudi il menu se il giocatore esce
+            playerInside = false;
+
+            if (closeWhenExitZone && isOpen)
+                CloseMenu();
         }
     }
 
-    void Update()
+    private void Update()
     {
-        if (playerInZone && Input.GetKeyDown(KeyCode.M)) // M per aprire il menu
+        if (!playerInside) return;
+
+        if (Input.GetKeyDown(openKey))
         {
-            if (sellMenuUI != null)
-                sellMenuUI.SetActive(!sellMenuUI.activeSelf); // Toggle menu
+            if (toggleWithSameKey)
+            {
+                if (isOpen) CloseMenu();
+                else OpenMenu();
+            }
+            else
+            {
+                if (!isOpen) OpenMenu();
+            }
         }
     }
+
+    public void OpenMenu()
+    {
+        isOpen = true;
+        if (menuRoot != null) menuRoot.SetActive(true);
+
+        playerInventory?.SetActive(false);
+
+        Time.timeScale = 0f;
+    }
+
+    public void CloseMenu()
+    {
+        Time.timeScale = 1f;
+        isOpen = false;
+        if (menuRoot != null) menuRoot.SetActive(false);
+
+        playerInventory?.SetActive(true);
+
+        
+    }
+    
 }

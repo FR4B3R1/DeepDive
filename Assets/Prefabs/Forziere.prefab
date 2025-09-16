@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 3979526721603399729}
   m_Layer: 0
   m_Name: Forziere
-  m_TagString: Collectible
+  m_TagString: Forziere
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -138,3 +138,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   weight: 4
+  value: 50

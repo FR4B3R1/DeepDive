@@ -1,9 +1,13 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(Rigidbody2D))]
 public class PlayerBehaviour : MonoBehaviour
 {
+    [Header("Vita")]
+    [SerializeField] public float health = 5f;
+
     [Header("Movimento")]
     [SerializeField] private float moveSpeed = 5f;
     [SerializeField] private float swimSpeed = 2f;
@@ -19,7 +23,6 @@ public class PlayerBehaviour : MonoBehaviour
     [SerializeField] private float harpoonSpeed = 10f;
     [SerializeField] private float harpoonCooldown = 1f;
     private float lastHarpoonTime = -Mathf.Infinity;
-
 
     [Header("Fisica acqua")]
     [SerializeField] private float waterDrag = 3f;
@@ -39,8 +42,6 @@ public class PlayerBehaviour : MonoBehaviour
     [SerializeField] private float initialSinkForce = 2.0f;
     [SerializeField] private float buoyancyRampTime = 0.8f;
 
-    [Header("Effetti")]
-    [SerializeField] private GameObject splashEffectPrefab;
 
     private Vector2 moveInput;
     private bool isInWater = false;
@@ -49,7 +50,6 @@ public class PlayerBehaviour : MonoBehaviour
     private float buoyancyT = 0f;
     private float waterSurfaceY = Mathf.NegativeInfinity;
     private Collider2D currentWaterTrigger;
-
     private Rigidbody2D rb;
 
     public void OnMove(InputAction.CallbackContext context)
@@ -133,7 +133,6 @@ public class PlayerBehaviour : MonoBehaviour
         Debug.Log($"Peso totale trasportato: {carriedWeight}");
     }
 
-
     [System.Obsolete]
     private void FireHarpoon()
     {
@@ -160,9 +159,7 @@ public class PlayerBehaviour : MonoBehaviour
         }
     }
 
-
-
-
+    [System.Obsolete]
     public void OnFireHarpoon(InputAction.CallbackContext context)
     {
         if (context.performed)
@@ -170,7 +167,6 @@ public class PlayerBehaviour : MonoBehaviour
             FireHarpoon();
         }
     }
-
 
     private void OnTriggerEnter2D(Collider2D other)
     {
@@ -181,9 +177,6 @@ public class PlayerBehaviour : MonoBehaviour
             sinkTimer = 0f;
             buoyancyT = 0f;
             currentWaterTrigger = other;
-
-            if (splashEffectPrefab != null)
-                Instantiate(splashEffectPrefab, transform.position, Quaternion.identity);
         }
     }
 
@@ -195,5 +188,29 @@ public class PlayerBehaviour : MonoBehaviour
             isSinking = false;
             currentWaterTrigger = null;
         }
+    }
+
+    private void OnDestroy()
+    {
+        if(health > 0f)
+            return; // Non morire se hai ancora vita
+        if(health <= 0f)
+        {
+            SceneManager.LoadScene("GameOverScene");
+            health = 0f;
+
+            PlayerInventory inventory = GetComponent<PlayerInventory>();
+            if (inventory != null)
+            {
+                inventory.ResetInventory();
+            }
+        }
+
+    }
+
+    public void ResetWeight()
+    {
+        carriedWeight = 0f;
+        Debug.Log("Peso trasportato resettato.");
     }
 }

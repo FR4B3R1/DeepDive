@@ -37,25 +37,6 @@ public class SharkChaseAI2D : MonoBehaviour
     [SerializeField] private Collider2D waterArea;   // IsTrigger=ON
     [SerializeField] private float waterPadding = 0.12f;
 
-    [Header("Attacco (morso)")]
-    [Tooltip("Distanza massima dalla bocca per poter mordere.")]
-    [SerializeField] private float biteRange = 0.85f;
-    [Tooltip("Danno inflitto al player.")]
-    [SerializeField] private float biteDamage = 10f;
-    [Tooltip("Forza del knockback applicato al player.")]
-    [SerializeField] private float biteKnockback = 6f;
-    [Tooltip("Cooldown tra un morso e il successivo (s).")]
-    [SerializeField] private float attackCooldown = 1.25f;
-    [Tooltip("Tempo di windup prima dello scatto (s).")]
-    [SerializeField] private float biteWindup = 0.12f;
-    [Tooltip("Durata della finestra attiva (scatto) in cui il morso può colpire (s).")]
-    [SerializeField] private float biteActiveTime = 0.18f;
-    [Tooltip("Velocità dello scatto durante il morso.")]
-    [SerializeField] private float biteLungeSpeed = 5.5f;
-    [Tooltip("Tempo di recover dopo il morso (s).")]
-    [SerializeField] private float biteRecover = 0.22f;
-    [Tooltip("Layer che verrà colpito dal morso (metti il layer del player).")]
-    [SerializeField] private LayerMask playerHitMask = ~0; // per default colpisce tutto (regolalo in Editor)
     [Tooltip("Attacca solo se il player è dentro i bounds dell'acqua.")]
     [SerializeField] private bool requirePlayerInWater = true;
 
@@ -221,17 +202,6 @@ public class SharkChaseAI2D : MonoBehaviour
             return;
         }
 
-        // Attacco: se entro range, cooldown ok e (opzionale) player in acqua
-        float distToPlayer = Vector2.Distance(rb.position, player.position);
-        bool playerInsideWater = !requirePlayerInWater || (waterArea != null && ShrunkWaterBounds().Contains(player.position));
-
-        if (distToPlayer <= biteRange && Time.time >= nextAttackTime && playerInsideWater)
-        {
-            if (attackCo == null)
-                attackCo = StartCoroutine(BiteAttack());
-            return;
-        }
-
         // Inseguimento
         Vector2 targetPos = player.position;
         if (waterArea != null) targetPos = ClampToWater(targetPos);
@@ -240,95 +210,6 @@ public class SharkChaseAI2D : MonoBehaviour
         Vector2 desiredVel = (to.sqrMagnitude > 0.0001f) ? to.normalized * chaseSpeed : Vector2.zero;
 
         CurrentVelocity = Vector2.MoveTowards(CurrentVelocity, desiredVel, acceleration * Time.fixedDeltaTime);
-    }
-
-    // -------------------- Attack (Morso) --------------------
-
-    private IEnumerator BiteAttack()
-    {
-        state = State.Attack;
-        hasDealtDamageThisBite = false;
-
-        // 1) WINDUP: fermati e “prendi la mira”
-        CurrentVelocity = Vector2.zero;
-        if (player != null)
-        {
-            Vector2 dir = ((Vector2)player.position - rb.position);
-            if (dir.sqrMagnitude > 0.0001f) facingDir = dir.normalized;
-        }
-        if (biteWindup > 0f) yield return new WaitForSeconds(biteWindup);
-
-        // 2) ACTIVE (LUNGE): scatto in avanti con finestra di impatto
-        Vector2 lungeDir = facingDir;
-        float t = 0f;
-        while (t < biteActiveTime)
-        {
-            t += Time.fixedDeltaTime;
-
-            // spingi in avanti
-            CurrentVelocity = Vector2.MoveTowards(CurrentVelocity, lungeDir * biteLungeSpeed, acceleration * Time.fixedDeltaTime);
-
-            // controllo hit
-            TryBiteHit();
-
-            yield return new WaitForFixedUpdate();
-        }
-
-        // 3) RECOVER: fermati un attimo
-        CurrentVelocity = Vector2.zero;
-        if (biteRecover > 0f) yield return new WaitForSeconds(biteRecover);
-
-        nextAttackTime = Time.time + attackCooldown;
-        attackCo = null;
-
-        // Torna allo stato coerente
-        state = (seesPlayer ? State.Chase : State.Patrol);
-    }
-
-    private void TryBiteHit()
-    {
-        if (hasDealtDamageThisBite) return;
-
-        Vector2 center = (eye != null) ? (Vector2)eye.position : rb.position;
-
-        // OverlapCircle: controlla i collider del layer playerHitMask
-        Collider2D hit = Physics2D.OverlapCircle(center, biteRange, playerHitMask);
-        if (hit == null) return;
-
-        // filtra proprio il player (se disponibile)
-        if (player != null && !hit.transform.IsChildOf(player) && hit.transform != player)
-        {
-            // Se vuoi essere permissivo, rimuovi questo check
-        }
-
-        // Applica danno/knockback (IDamageable se disponibile, altrimenti PlayerHealth semplice)
-        Vector2 dir = ((Vector2)hit.bounds.center - rb.position).normalized;
-
-        // 1) Interfaccia generica (consigliata)
-        var dmg = hit.GetComponentInParent<IDamageable>();
-        if (dmg != null)
-        {
-            dmg.TakeDamage(biteDamage, dir, biteKnockback);
-        }
-        else
-        {
-            // 2) Implementazione di esempio: PlayerHealth (vedi sotto)
-            var health = hit.GetComponentInParent<PlayerHealth>();
-            if (health != null) health.TakeDamage(biteDamage);
-
-            // 3) Applica knockback se c'è un Rigidbody2D
-            var prb = hit.GetComponentInParent<Rigidbody2D>();
-            if (prb != null)
-            {
-#if UNITY_6000_0_OR_NEWER
-                prb.linearVelocity += dir * biteKnockback;
-#else
-                prb.velocity += dir * biteKnockback;
-#endif
-            }
-        }
-
-        hasDealtDamageThisBite = true;
     }
 
     // -------------------- Visione --------------------
@@ -485,10 +366,6 @@ public class SharkChaseAI2D : MonoBehaviour
         Gizmos.DrawLine(eyeT.position, (Vector2)eyeT.position + left * viewRadius);
         Gizmos.DrawLine(eyeT.position, (Vector2)eyeT.position + right * viewRadius);
 
-        // bite range
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(eyeT.position, biteRange);
-
         // acqua
         if (waterArea != null)
         {
@@ -515,56 +392,6 @@ public class SharkChaseAI2D : MonoBehaviour
         Gizmos.DrawSphere(B, 0.1f);
         Gizmos.DrawLine(A, B);
     }
+
 }
 
-/* ====== Opzionale: interfaccia danno generica ====== */
-public interface IDamageable
-{
-    void TakeDamage(float amount, Vector2 hitDirection, float knockback);
-}
-
-/* ====== Opzionale: implementazione semplice di vita del player ======
- * Se non hai già un tuo sistema, puoi usarla come base.
- */
-public class PlayerHealth : MonoBehaviour, IDamageable
-{
-    [SerializeField] private float maxHP = 100f;
-    [SerializeField] private float iFrames = 0.5f; // invulnerabilità dopo il danno
-    private float currentHP;
-    private float nextHittableTime = 0f;
-    private Rigidbody2D rb;
-
-    void Awake()
-    {
-        currentHP = maxHP;
-        rb = GetComponent<Rigidbody2D>();
-    }
-
-    public void TakeDamage(float amount, Vector2 hitDir, float knockback)
-    {
-        if (Time.time < nextHittableTime) return;
-        nextHittableTime = Time.time + iFrames;
-
-        currentHP -= amount;
-        if (currentHP <= 0f)
-        {
-            // TODO: morte player
-            Debug.Log("Player morto");
-        }
-
-        if (rb != null)
-        {
-#if UNITY_6000_0_OR_NEWER
-            rb.linearVelocity += hitDir.normalized * knockback;
-#else
-            rb.velocity += hitDir.normalized * knockback;
-#endif
-        }
-    }
-
-    // Overload se vuoi chiamarla senza interfaccia
-    public void TakeDamage(float amount)
-    {
-        TakeDamage(amount, Vector2.zero, 0f);
-    }
-}

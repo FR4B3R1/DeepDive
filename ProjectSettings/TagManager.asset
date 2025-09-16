@@ -6,8 +6,11 @@ TagManager:
   tags:
   - Water
   - BoxVolume
-  - Collectible
   - Harpoon
+  - Forziere
+  - Cristallo
+  - Spada
+  - Legno
   layers:
   - Default
   - TransparentFX
@@ -17,7 +20,7 @@ TagManager:
   - UI
   - Obstacle
   - BoxVolume
-  - 
+  - Background
   - 
   - 
   - 

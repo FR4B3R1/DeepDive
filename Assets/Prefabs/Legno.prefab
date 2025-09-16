@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 3979526721603399729}
   m_Layer: 0
   m_Name: Legno
-  m_TagString: Collectible
+  m_TagString: Legno
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -78,8 +78,8 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Sprite: {fileID: 7482667652216324306, guid: 48e93eef0688c4a259cb0eddcd8661f7, type: 3}
+  m_Color: {r: 0.7509433, g: 0.40097535, b: 0.41774422, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -137,4 +137,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 03b1fb29b22322849a083eafbb1655b8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  weight: 1.3
+  weight: 2
+  value: 1

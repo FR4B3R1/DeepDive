@@ -2,7 +2,8 @@ using UnityEngine;
 
 public class Collectible : MonoBehaviour
 {
-    [SerializeField] private float weight = 1f;
+    [SerializeField] private float weight;
+    [SerializeField] public int value;
 
     private bool isPlayerNearby = false;
 
@@ -23,9 +24,11 @@ public class Collectible : MonoBehaviour
         if (isPlayerNearby && Input.GetKeyDown(KeyCode.E))
         {
             PlayerBehaviour player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerBehaviour>();
-            if (player != null)
+            PlayerInventory inventory = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerInventory>();
+            if (player != null && inventory != null)
             {
                 player.AddWeight(weight);
+                inventory.AddMoney(this.GetComponent<Collider2D>());
                 Destroy(gameObject);
             }
         }

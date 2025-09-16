@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 6238370926688404547}
   m_Layer: 3
   m_Name: Player
-  m_TagString: Player
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -139,6 +139,7 @@ MonoBehaviour:
   harpoonPrefab: {fileID: 0}
   harpoonSpawnPoint: {fileID: 0}
   harpoonSpeed: 10
+  harpoonCooldown: 1
   waterDrag: 2
   normalDrag: 0
   buoyancyK: 8
