@@ -323,8 +323,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
+  m_AnchoredPosition: {x: 0, y: -4.6}
+  m_SizeDelta: {x: 40, y: 40}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &46254859
 MonoBehaviour:
@@ -3427,6 +3427,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 733044099}
+  - component: {fileID: 733044100}
   m_Layer: 5
   m_Name: PlayerMarker
   m_TagString: Untagged
@@ -3456,6 +3457,41 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &733044100
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 733044098}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1831770f2fedd3b4e896ab6bcf788566, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 1411661508}
+  playerRb: {fileID: 6154866759756611701}
+  arrow: {fileID: 802567798}
+  glow: {fileID: 46254859}
+  pulseRing: {fileID: 424249304}
+  minimapKeepsNorthUp: 1
+  arrowHeadingOffsetDeg: 0
+  markerColor: {r: 1, g: 0.95, b: 0.2, a: 1}
+  glowColor: {r: 1, g: 1, b: 1, a: 0.55}
+  pulseColor: {r: 1, g: 0.95, b: 0.2, a: 0.8}
+  breathingPulse: 1
+  pulseMinScale: 0.85
+  pulseMaxScale: 1.25
+  pulseSpeed: 1.6
+  pulseScalesWithSpeed: 1
+  refSpeed: 8
+  maxPulseSpeedMultiplier: 2
+  periodicPing: 1
+  pingInterval: 1.8
+  pingDuration: 0.9
+  pingStartScale: 0.6
+  pingEndScale: 2
+  pingStartAlpha: 0.65
 --- !u!1001 &746786930
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3780,7 +3816,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 802567797}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: -1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -8112,7 +8148,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
+  m_SizeDelta: {x: 350, y: 250}
   m_Pivot: {x: 0, y: 0}
 --- !u!114 &1921391967
 MonoBehaviour:
@@ -8461,8 +8497,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1966910540}
   - component: {fileID: 1966910539}
-  - component: {fileID: 1966910538}
   - component: {fileID: 1966910537}
+  - component: {fileID: 1966910541}
   m_Layer: 0
   m_Name: MinimapCamera
   m_TagString: Untagged
@@ -8514,14 +8550,6 @@ MonoBehaviour:
     m_MipBias: 0
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
---- !u!81 &1966910538
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1966910536}
-  m_Enabled: 1
 --- !u!20 &1966910539
 Camera:
   m_ObjectHideFlags: 0
@@ -8553,15 +8581,15 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: 0.3
-  far clip plane: 1000
+  near clip plane: 0
+  far clip plane: 2000
   field of view: 60
   orthographic: 1
   orthographic size: 80
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 1608
+    m_Bits: 3672
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 8400000, guid: 905f37802cab65e48975a2d02b979d44, type: 2}
   m_TargetDisplay: 0
@@ -8588,6 +8616,24 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1966910541
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1966910536}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2aae3e3d57d3cdf4a96325215bc2acab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 1411661508}
+  orthoSize: 20
+  keepNorthUp: 1
+  offset: {x: 0, y: 0, z: -10}
+  followLerp: 15
+  rotateLerp: 12
 --- !u!1001 &1967784465
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -9370,7 +9416,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 100}
+  m_SizeDelta: {x: 0, y: 250}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2115176471
 MonoBehaviour:
@@ -9832,6 +9878,11 @@ MonoBehaviour:
 --- !u!20 &6154866759756611693 stripped
 Camera:
   m_CorrespondingSourceObject: {fileID: 8548744743936117305, guid: 995affdbd373700499a13f2ee5293596, type: 3}
+  m_PrefabInstance: {fileID: 6154866759756611691}
+  m_PrefabAsset: {fileID: 0}
+--- !u!50 &6154866759756611701 stripped
+Rigidbody2D:
+  m_CorrespondingSourceObject: {fileID: 5861319629531856573, guid: 995affdbd373700499a13f2ee5293596, type: 3}
   m_PrefabInstance: {fileID: 6154866759756611691}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &7728306060522604327
