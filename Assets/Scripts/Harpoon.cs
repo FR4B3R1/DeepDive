@@ -19,13 +19,6 @@ public class Harpoon : MonoBehaviour
         {
             rb.gravityScale = 0f; // In acqua, niente gravità
         }
-
-        CrystalBehaviour crystal = other.GetComponent<CrystalBehaviour>();
-        if (crystal != null)
-        {
-            crystal.HitWithHarpoon();
-            Destroy(gameObject);
-        }
     }
 
     void OnTriggerExit2D(Collider2D other)

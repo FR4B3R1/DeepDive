@@ -89,6 +89,11 @@ public class PlayerInventory : MonoBehaviour
         if(earnedMoney >= 1000)
         {
             Time.timeScale = 1f;
+            SellMenu sell = GetComponent<SellMenu>();
+            if (sell != null)
+            {
+                sell.CloseMenu(); // Chiudi il menu di vendita se aperto
+            }
             SceneManager.LoadScene("WinScene");
             return;
         }

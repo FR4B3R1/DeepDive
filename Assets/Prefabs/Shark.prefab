@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 413786488953997058}
   m_Layer: 0
   m_Name: Shark
-  m_TagString: Untagged
+  m_TagString: Shark
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -195,7 +195,11 @@ MonoBehaviour:
   patrolPointA: {fileID: 0}
   patrolPointB: {fileID: 0}
   stopDistance: 0.25
-  flipOnCollision: 1
+  flipOnCollision: 0
   waterArea: {fileID: 0}
   waterPadding: 0.2
   requirePlayerInWater: 1
+  contactDamage: 5
+  contactCooldown: 1
+  damageOnlyWhenChasing: 1
+  debugContactLogs: 0

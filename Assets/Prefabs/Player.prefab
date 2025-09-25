@@ -14,9 +14,12 @@ GameObject:
   - component: {fileID: 804792739680659552}
   - component: {fileID: -7509507574921182367}
   - component: {fileID: 6238370926688404547}
+  - component: {fileID: 186625654098382676}
+  - component: {fileID: 6940194744154410814}
+  - component: {fileID: -6037919788179486070}
   m_Layer: 3
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -31,7 +34,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.7926195, y: 1.7926195, z: 1.7926195}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 111961103368930814}
@@ -81,8 +84,8 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
-  m_Color: {r: 1, g: 0, b: 0.09025288, a: 1}
+  m_Sprite: {fileID: 1363941140247679119, guid: 4f6d286e6b10aea48aacddb376b44054, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -131,15 +134,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: acaf0c0320529cb479d7e6c178cf3939, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 7
+  health: {fileID: 0}
+  gameOverSceneName: GameOverScene
+  gameOverDelay: 0.25
+  moveSpeed: 4
   swimSpeed: 8
-  accelInWater: 10
+  accelInWater: 4
+  swimAnimThreshold: 0.1
   carriedWeight: 0
-  weightImpactFactor: 1
+  weightImpactFactor: 0.1
   harpoonPrefab: {fileID: 0}
   harpoonSpawnPoint: {fileID: 0}
   harpoonSpeed: 10
-  harpoonCooldown: 1
+  harpoonCooldown: 0.5
   waterDrag: 2
   normalDrag: 0
   buoyancyK: 8
@@ -148,7 +155,6 @@ MonoBehaviour:
   sinkDuration: 1
   initialSinkForce: 10
   buoyancyRampTime: 1
-  splashEffectPrefab: {fileID: 0}
 --- !u!114 &-7509507574921182367
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -249,18 +255,80 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: -0.0016910434, y: 0.0054495633}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1, y: 1}
+    oldSize: {x: 0.6, y: 1.59}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 0.59364426, y: 1.5736101}
   m_EdgeRadius: 0
+--- !u!114 &186625654098382676
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 959361971909193939}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 63a560c6d9c34f942b66a46efe309038, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentMoney: 0
+  forzieriCollected: 0
+  cristalliCollected: 0
+  spadeCollected: 0
+  legnoCollected: 0
+  soldiText: {fileID: 0}
+  forzieriText: {fileID: 0}
+  cristalliText: {fileID: 0}
+  spadeText: {fileID: 0}
+  legnoText: {fileID: 0}
+  earnedMoneyText: {fileID: 0}
+  earnedMoneyText_overlay: {fileID: 0}
+  targetMoneyText_overlay: {fileID: 0}
+  actualMoneyInInventory_overlay: {fileID: 0}
+  vendiButton: {fileID: 0}
+--- !u!95 &6940194744154410814
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 959361971909193939}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 09445950eb6cedf45b487bf18927057a, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &-6037919788179486070
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 959361971909193939}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eaac1b54431d51c4dbe305b82c1937b8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 5
 --- !u!1 &8897409919148464682
 GameObject:
   m_ObjectHideFlags: 0

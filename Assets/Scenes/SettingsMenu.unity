@@ -389,7 +389,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Movement:\t\t\twasd\n\nCollect objects:\t\te\n\nAim:\t\t\t\t\tmouse\n\nShoot:\t\t\t\tLMB\n\n"
+  m_text: "Movement:\t\t\twasd\n\nCollect objects:\t\te\n\nAim:\t\t\t\t\tmouse\n"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 1ea2b8a3934f89d479f16a73c3013123, type: 2}
   m_sharedMaterial: {fileID: 7729568516198375827, guid: 1ea2b8a3934f89d479f16a73c3013123, type: 2}

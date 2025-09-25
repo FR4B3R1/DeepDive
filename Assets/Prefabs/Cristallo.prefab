@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 3979526721603399729}
   - component: {fileID: 7453097125775412726}
   - component: {fileID: 6829160549442786270}
+  - component: {fileID: -4712363981191030021}
   m_Layer: 0
   m_Name: Cristallo
   m_TagString: Cristallo
@@ -104,6 +105,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   weight: 3
   value: 100
+  destroyedCrystal: {fileID: 281133760456155009, guid: 99e5fcca27b777b4fa371de74b780e4d, type: 3}
 --- !u!61 &7453097125775412726
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -157,10 +159,30 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3844434606234482286}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e6060d0fb62210f409d6c5d692129ab7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hitsRequired: 4
-  destructionEffectPrefab: {fileID: 0}
+--- !u!95 &-4712363981191030021
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3844434606234482286}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 0372a23e1a4603643a543344d8218fbc, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0

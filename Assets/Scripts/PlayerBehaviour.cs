@@ -5,13 +5,17 @@ using UnityEngine.SceneManagement;
 [RequireComponent(typeof(Rigidbody2D))]
 public class PlayerBehaviour : MonoBehaviour
 {
-    [Header("Vita")]
-    [SerializeField] public float health = 5f;
+
+    [Header("Riferimenti")]
+    [SerializeField] private PlayerHealth health;
+    [SerializeField] private string gameOverSceneName = "GameOverScene";
+    [SerializeField] private float gameOverDelay = 0.25f;
 
     [Header("Movimento")]
     [SerializeField] private float moveSpeed = 5f;
     [SerializeField] private float swimSpeed = 2f;
     [SerializeField] private float accelInWater = 10f;
+    [SerializeField] private float swimAnimThreshold = 0.1f; // soglia per considerare "in movimento" in acqua
 
     [Header("Inventario")]
     [SerializeField] private float carriedWeight = 0f;
@@ -42,7 +46,6 @@ public class PlayerBehaviour : MonoBehaviour
     [SerializeField] private float initialSinkForce = 2.0f;
     [SerializeField] private float buoyancyRampTime = 0.8f;
 
-
     private Vector2 moveInput;
     private bool isInWater = false;
     private bool isSinking = false;
@@ -51,6 +54,9 @@ public class PlayerBehaviour : MonoBehaviour
     private float waterSurfaceY = Mathf.NegativeInfinity;
     private Collider2D currentWaterTrigger;
     private Rigidbody2D rb;
+    private Animator animator;
+    private SpriteRenderer spriteRenderer;
+
 
     public void OnMove(InputAction.CallbackContext context)
     {
@@ -61,11 +67,19 @@ public class PlayerBehaviour : MonoBehaviour
 
     void Awake()
     {
+
         rb = GetComponent<Rigidbody2D>();
-        // Evita ribaltamenti
         rb.constraints = RigidbodyConstraints2D.FreezeRotation;
+        animator = GetComponent<Animator>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
+
+
+        if (health == null) health = GetComponent<PlayerHealth>();
+        if (health == null) health = GetComponentInChildren<PlayerHealth>();
+
     }
 
+    [System.Obsolete]
     void FixedUpdate()
     {
         if (isInWater)
@@ -125,6 +139,25 @@ public class PlayerBehaviour : MonoBehaviour
             // Input orizzontale
             rb.linearVelocity = new Vector2(moveInput.x * moveSpeed, rb.linearVelocity.y);
         }
+
+        // animazioni
+        if (animator != null)
+        {
+            bool isWalking = Mathf.Abs(moveInput.x) > 0.01f || Mathf.Abs(moveInput.y) > 0.01f;
+            animator.SetBool("isWalking", isWalking);
+
+            bool isSwimming = isInWater && rb.velocity.magnitude > swimAnimThreshold;
+            animator.SetBool("isSwimming", isSwimming);
+        }
+
+        if (spriteRenderer != null)
+        {
+            if (moveInput.x > 0.01f)
+                spriteRenderer.flipX = false; // Verso destra
+            else if (moveInput.x < -0.01f)
+                spriteRenderer.flipX = true;  // Verso sinistra
+
+        }
     }
 
     public void AddWeight(float amount)
@@ -178,6 +211,7 @@ public class PlayerBehaviour : MonoBehaviour
             buoyancyT = 0f;
             currentWaterTrigger = other;
         }
+
     }
 
     private void OnTriggerExit2D(Collider2D other)
@@ -190,27 +224,51 @@ public class PlayerBehaviour : MonoBehaviour
         }
     }
 
-    private void OnDestroy()
-    {
-        if(health > 0f)
-            return; // Non morire se hai ancora vita
-        if(health <= 0f)
-        {
-            SceneManager.LoadScene("GameOverScene");
-            health = 0f;
-
-            PlayerInventory inventory = GetComponent<PlayerInventory>();
-            if (inventory != null)
-            {
-                inventory.ResetInventory();
-            }
-        }
-
-    }
-
     public void ResetWeight()
     {
         carriedWeight = 0f;
         Debug.Log("Peso trasportato resettato.");
     }
+
+
+    void OnEnable()
+    {
+        if (health != null)
+        {
+            health.OnDied += HandleDeath;
+            // Se vuoi aggiornare UI:
+            // health.OnHealthChanged += HandleHealthChanged;
+        }
+    }
+
+    void OnDisable()
+    {
+        if (health != null)
+        {
+            health.OnDied -= HandleDeath;
+            // health.OnHealthChanged -= HandleHealthChanged;
+        }
+    }
+
+    private void HandleDeath()
+    {
+        // Disabilita input/movimento (se usi Input System o un controller tuo)
+        // var input = GetComponent<PlayerInput>(); if (input) input.enabled = false;
+        // Esempio: animator?.SetTrigger("Die");
+
+        // Resetta inventario prima del game over
+        var inventory = GetComponent<PlayerInventory>();
+        if (inventory != null) inventory.ResetInventory();
+
+        // Carica Game Over (meglio fuori da OnDestroy)
+        if (gameOverDelay > 0f) StartCoroutine(LoadGameOverAfterDelay());
+        else SceneManager.LoadScene(gameOverSceneName);
+    }
+
+    private System.Collections.IEnumerator LoadGameOverAfterDelay()
+    {
+        yield return new WaitForSeconds(gameOverDelay);
+        SceneManager.LoadScene(gameOverSceneName);
+    }
+
 }

@@ -40,6 +40,18 @@ public class SharkChaseAI2D : MonoBehaviour
     [Tooltip("Attacca solo se il player è dentro i bounds dell'acqua.")]
     [SerializeField] private bool requirePlayerInWater = true;
 
+    [Header("Danno a Contatto")]
+    [SerializeField] private float contactDamage = 20f;
+    [SerializeField] private float contactCooldown = 1f;
+    [SerializeField] private bool damageOnlyWhenChasing = false; // se true, danneggia solo quando in Chase
+    [SerializeField] private bool debugContactLogs = false;
+
+    private float nextContactTime = 0f;
+
+
+    // runtime
+    private float nextAttackTime = 0f;
+
     // --- runtime ---
     private Rigidbody2D rb;
     private State state = State.Patrol;
@@ -50,11 +62,6 @@ public class SharkChaseAI2D : MonoBehaviour
     // Patrol
     private Vector2 patrolA, patrolB;
     private bool goingToB = true;
-
-    // Attack
-    private float nextAttackTime = 0f;
-    private bool hasDealtDamageThisBite = false;
-    private Coroutine attackCo;
 
     // -------------------------------------------------------
     // Compatibilità API (Unity 6 vs versioni precedenti)
@@ -210,6 +217,10 @@ public class SharkChaseAI2D : MonoBehaviour
         Vector2 desiredVel = (to.sqrMagnitude > 0.0001f) ? to.normalized * chaseSpeed : Vector2.zero;
 
         CurrentVelocity = Vector2.MoveTowards(CurrentVelocity, desiredVel, acceleration * Time.fixedDeltaTime);
+
+        // Controllo attacco
+        ProcessContact(eye.GetComponent<Collider2D>());
+
     }
 
     // -------------------- Visione --------------------
@@ -332,15 +343,6 @@ public class SharkChaseAI2D : MonoBehaviour
         goingToB = (Vector2.Distance(rb.position, patrolA) <= Vector2.Distance(rb.position, patrolB));
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (!flipOnCollision) return;
-        if (state == State.Patrol && collision.collider != null)
-        {
-            goingToB = !goingToB;
-        }
-    }
-
     // -------------------- Gizmos --------------------
 
     void OnDrawGizmosSelected()
@@ -392,6 +394,75 @@ public class SharkChaseAI2D : MonoBehaviour
         Gizmos.DrawSphere(B, 0.1f);
         Gizmos.DrawLine(A, B);
     }
+
+    // Chiamato da tutti gli handler di contatto (trigger/collisione)
+    private void ProcessContact(Collider2D other)
+    {
+        // Cooldown
+        if (Time.time < nextContactTime) return;
+
+        // Stato (opzionale)
+        if (damageOnlyWhenChasing && state != State.Chase && state != State.Attack)
+            return;
+
+        // Solo il Player: verifica tramite riferimento Transform
+        bool isPlayerHit = false;
+        if (player != null)
+        {
+            // colpo su root o child del player
+            isPlayerHit = (other.transform == player) || other.transform.IsChildOf(player);
+        }
+        else
+        {
+            // fallback: se non hai il riferimento, prova col Tag "Player"
+            isPlayerHit = other.CompareTag("Player") || (other.attachedRigidbody && other.attachedRigidbody.CompareTag("Player"));
+        }
+
+        if (!isPlayerHit) return;
+
+        // (Opzionale) richiedi che il player sia dentro l'acqua
+        if (requirePlayerInWater && waterArea != null)
+        {
+            if (!waterArea.OverlapPoint(other.bounds.center))
+            {
+                if (debugContactLogs) Debug.Log("[Shark] Player fuori dall'acqua → niente danno a contatto.");
+                return;
+            }
+        }
+
+        // Trova qualcosa di danneggiabile sul player (IDamageable preferito; fallback PlayerHealth)
+        IDamageable damageable =
+              other.GetComponentInParent<IDamageable>()
+           ?? other.GetComponent<IDamageable>();
+        if (damageable != null)
+        {
+            damageable.TakeDamage(contactDamage);
+            if (debugContactLogs) Debug.Log($"[Shark] Danno a contatto (IDamageable): {contactDamage}");
+            nextContactTime = Time.time + contactCooldown;
+            return;
+        }
+
+        // Fallback: PlayerHealth semplice (se non implementa IDamageable)
+        var ph = other.GetComponentInParent<PlayerHealth>() ?? other.GetComponent<PlayerHealth>();
+        if (ph != null)
+        {
+            ph.TakeDamage(contactDamage);
+            if (debugContactLogs) Debug.Log($"[Shark] Danno a contatto (PlayerHealth fallback): {contactDamage}");
+            nextContactTime = Time.time + contactCooldown;
+            return;
+        }
+
+        if (debugContactLogs) Debug.LogWarning("[Shark] Nessun componente IDamageable/PlayerHealth trovato sul Player colpito.");
+    }
+
+    // ----- HANDLER per TRIGGER e COLLISIONI -----
+    // Usa entrambi così funziona sia con collider di tipo Trigger che non-Trigger.
+
+    private void OnTriggerEnter2D(Collider2D other) { ProcessContact(other); }
+    private void OnTriggerStay2D(Collider2D other) { ProcessContact(other); }
+    private void OnCollisionEnter2D(Collision2D col) { ProcessContact(col.collider); }
+    private void OnCollisionStay2D(Collision2D col) { ProcessContact(col.collider); }
+
 
 }
 
