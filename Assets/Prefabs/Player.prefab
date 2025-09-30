@@ -137,8 +137,8 @@ MonoBehaviour:
   health: {fileID: 0}
   gameOverSceneName: GameOverScene
   gameOverDelay: 0.25
-  moveSpeed: 4
-  swimSpeed: 8
+  moveSpeed: 7
+  swimSpeed: 13
   accelInWater: 4
   swimAnimThreshold: 0.1
   carriedWeight: 0
