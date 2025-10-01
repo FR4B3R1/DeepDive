@@ -7,12 +7,13 @@ using UnityEngine.SceneManagement;
 public class PlayerInventory : MonoBehaviour
 {
     [Header("Valori")]
-    public int currentMoney = 0;      // Denaro potenziale in mano (si azzera alla vendita/morte)
+    public double currentMoney = 0;      // Denaro potenziale in mano (si azzera alla vendita/morte)
     public int forzieriCollected = 0;
     public int cristalliCollected = 0;
     public int spadeCollected = 0;
     public int legnoCollected = 0;
-    private int earnedMoney = 0;      // Denaro effettivamente guadagnato (persistente)
+    private double earnedMoney = 0;      // Denaro effettivamente guadagnato (persistente)
+    public int targetMoney = 50000;    // Obiettivo di denaro per vincere
 
     [Header("UI (assegna da Inspector)")]
     [SerializeField] private TMP_Text soldiText;        // Mostra currentMoney
@@ -28,7 +29,9 @@ public class PlayerInventory : MonoBehaviour
 
     [SerializeField] private Button vendiButton;        // <<< Opzionale: assegna il tuo bottone "Vendi"
 
-    private CultureInfo it = new CultureInfo("it-IT");
+    Collectible collectible;
+
+    // private CultureInfo it = new CultureInfo("it-IT");
 
     private void Awake()
     {
@@ -53,9 +56,9 @@ public class PlayerInventory : MonoBehaviour
         legnoCollected = 0;
 
 
-        actualMoneyInInventory_overlay.text = $"In Inventory: € 0,00";
-        targetMoneyText_overlay.text = $"Target: € 1000,00";
-        earnedMoneyText_overlay.text = $"Current: € 0,00";
+        actualMoneyInInventory_overlay.text = $"In Inventory:  0";
+        targetMoneyText_overlay.text = $"Target:  {targetMoney}";
+        earnedMoneyText_overlay.text = $"Current:  0";
 
         AggiornaUI();
     }
@@ -64,15 +67,17 @@ public class PlayerInventory : MonoBehaviour
     {
         // Aggiorna sempre il testo del totale guadagnato in overlay
         if (earnedMoneyText_overlay)
-            earnedMoneyText_overlay.text = $"Current: {earnedMoney.ToString("C0", it)},00";
+            earnedMoneyText_overlay.text = $"Current: {earnedMoney}";
     }
 
     public void AddMoney(Collider2D other)
     {
+        collectible = other.GetComponent<Collectible>();
+
         if (other == null) return;
         if (!other.TryGetComponent(out Collectible c)) return;
 
-        currentMoney += c.value;
+        currentMoney += collectible.GetValue();
 
         if (other.CompareTag("Forziere")) forzieriCollected++;
         else if (other.CompareTag("Cristallo")) cristalliCollected++;
@@ -86,7 +91,7 @@ public class PlayerInventory : MonoBehaviour
     {
         // Somma il denaro in mano al totale guadagnato
         earnedMoney += currentMoney;
-        if(earnedMoney >= 1000)
+        if(earnedMoney >= targetMoney)
         {
             Time.timeScale = 1f;
             SellMenu sell = GetComponent<SellMenu>();
@@ -120,7 +125,7 @@ public class PlayerInventory : MonoBehaviour
             menu.CloseMenu(); // Chiudi il menu di vendita se aperto
         }
 
-        Debug.Log($"€ Totale venduto: {earnedMoney}");
+        Debug.Log($"Totale venduto: {earnedMoney}");
     }
 
     public void ResetInventory()
@@ -136,13 +141,13 @@ public class PlayerInventory : MonoBehaviour
 
     private void AggiornaUI()
     {
-        if (soldiText) soldiText.text = $"Valore Oggetti: {currentMoney.ToString("C0", it)},00";  
+        if (soldiText) soldiText.text = $"Valore Oggetti: {currentMoney}";  
         if (forzieriText) forzieriText.text = $"Forzieri: {forzieriCollected}";
         if (cristalliText) cristalliText.text = $"Cristalli: {cristalliCollected}";
         if (spadeText) spadeText.text = $"Spade: {spadeCollected}";
         if (legnoText) legnoText.text = $"Legno: {legnoCollected}";
-        if (earnedMoneyText) earnedMoneyText.text = $"Totale Guadagnato: {earnedMoney.ToString("C0", it)},00";
-        if (actualMoneyInInventory_overlay) actualMoneyInInventory_overlay.text = $"In Inventory: {currentMoney.ToString("C0", it)},00";
+        if (earnedMoneyText) earnedMoneyText.text = $"Totale Guadagnato: {earnedMoney}";
+        if (actualMoneyInInventory_overlay) actualMoneyInInventory_overlay.text = $"In Inventory: {currentMoney}";
     }
 
     public void SetOverlayVisible(bool visible)

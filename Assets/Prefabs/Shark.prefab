@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 2813682811171481580}
   - component: {fileID: 8427304318584505731}
   - component: {fileID: 413786488953997058}
+  - component: {fileID: -1264393480962772208}
   m_Layer: 11
   m_Name: Shark
   m_TagString: Shark
@@ -29,8 +30,8 @@ Transform:
   m_GameObject: {fileID: 1822650914494787764}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -67.1, y: -20, z: 1}
-  m_LocalScale: {x: 3.67, y: 1, z: 1}
+  m_LocalPosition: {x: -67.1, y: -20, z: 2}
+  m_LocalScale: {x: 10, y: 10, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -79,7 +80,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
+  m_Sprite: {fileID: -3981183396806380358, guid: 4e69299af49f781489de87e8d9f69b90, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -116,7 +117,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 1
-  m_Constraints: 4
+  m_Constraints: 0
 --- !u!61 &8427304318584505731
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -155,7 +156,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1, y: 1}
+    oldSize: {x: 0.83, y: 0.48}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -177,15 +178,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 0}
   eye: {fileID: 8402935963261019298}
-  viewRadius: 10
+  viewRadius: 20
   viewAngle: 60
   obstacleMask:
     serializedVersion: 2
     m_Bits: 64
   scanInterval: 0.1
-  chaseSpeed: 5
-  patrolSpeed: 3
-  acceleration: 9
+  chaseSpeed: 12
+  patrolSpeed: 9
+  acceleration: 10
   rotateSmooth: 12
   waterDrag: 1.5
   velocityEps: 0.01
@@ -203,3 +204,34 @@ MonoBehaviour:
   contactCooldown: 1
   damageOnlyWhenChasing: 1
   debugContactLogs: 0
+  turnOnLayers:
+    serializedVersion: 2
+    m_Bits: 2112
+  sensorDistance: 0.6
+  sensorRadius: 0.2
+  turnCooldown: 0.25
+  sr: {fileID: 0}
+  pushBackDistance: 0.1
+  spriteFacesRight: 1
+--- !u!95 &-1264393480962772208
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1822650914494787764}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 96ec3f5b0e084034db7c3ae2992afbe3, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0

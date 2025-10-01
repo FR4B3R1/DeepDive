@@ -57,6 +57,18 @@ public class PlayerBehaviour : MonoBehaviour
     private Animator animator;
     private SpriteRenderer spriteRenderer;
 
+    private BoxCollider2D boxCollider;
+
+
+    private void Start()
+    {
+        boxCollider = GetComponent<BoxCollider2D>();
+        if (boxCollider == null)
+        {
+            Debug.LogWarning("BoxCollider2D non trovato sul giocatore. Aggiungilo per un rilevamento corretto dell'acqua.");
+        }
+
+    }
 
     public void OnMove(InputAction.CallbackContext context)
     {
@@ -271,4 +283,12 @@ public class PlayerBehaviour : MonoBehaviour
         SceneManager.LoadScene(gameOverSceneName);
     }
 
+    public void OnInteract(InputAction.CallbackContext context)
+    {
+        // Specify the type argument for ReadValue<TValue>()
+        // For a Button, you typically want to read a bool value (pressed or not)
+        bool isPressed = context.ReadValue<bool>();
+        // You can use isPressed to trigger interaction logic if needed
+        // Example: if (isPressed) { /* handle interaction */ }
+    }
 }
