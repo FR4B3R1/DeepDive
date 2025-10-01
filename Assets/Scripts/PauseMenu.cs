@@ -5,9 +5,11 @@ public class PauseMenu : MonoBehaviour
 {
     [SerializeField] private GameObject pauseMenu;
     [SerializeField] private GameObject playerInventory;
+    [SerializeField] private GameObject minimap;
 
     private bool isPaused;
     private bool isOverlayVisible = true;
+    private bool isMinimapVisible = true; 
 
     private void Update()
     {
@@ -19,7 +21,9 @@ public class PauseMenu : MonoBehaviour
     {
         isPaused = !isPaused;
         isOverlayVisible = !isOverlayVisible;
+        isMinimapVisible = !isMinimapVisible;
         playerInventory?.SetActive(isOverlayVisible);
+        minimap?.SetActive(isMinimapVisible);
         ApplyPause(isPaused);
     }
 

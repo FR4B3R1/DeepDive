@@ -7,6 +7,8 @@ public class SellMenu : MonoBehaviour
     [SerializeField] private GameObject menuRoot;     // Assegna qui il pannello/menu da mostrare
     [SerializeField] private PlayerBehaviour player;   // Riferimento allo script del giocatore
     [SerializeField] private GameObject playerInventory;
+    [SerializeField] private GameObject minimap;
+    
 
     [Header("Impostazioni")]
     [SerializeField] private string playerTag = "Player";
@@ -57,8 +59,19 @@ public class SellMenu : MonoBehaviour
         {
             if (toggleWithSameKey)
             {
-                if (isOpen) CloseMenu();
-                else OpenMenu();
+                if (isOpen)
+                {
+                    
+                    CloseMenu();
+                    minimap?.SetActive(true);
+
+                }
+                else 
+                {
+                    OpenMenu();
+                    minimap?.SetActive(false);
+                }
+               
             }
             else
             {

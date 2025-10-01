@@ -27,7 +27,9 @@ public class PlayerInventory : MonoBehaviour
     [SerializeField] private TMP_Text targetMoneyText_overlay;      // mostra il target money in overlay
     [SerializeField] private TMP_Text actualMoneyInInventory_overlay; // mostra il current money in overlay
 
+    [Header("Riferimenti UI")]
     [SerializeField] private Button vendiButton;        // <<< Opzionale: assegna il tuo bottone "Vendi"
+    [SerializeField] private GameObject minimap;    // riferimento alla minimappa
 
     Collectible collectible;
 
@@ -123,6 +125,7 @@ public class PlayerInventory : MonoBehaviour
         if (menu != null)
         {
             menu.CloseMenu(); // Chiudi il menu di vendita se aperto
+
         }
 
         Debug.Log($"Totale venduto: {earnedMoney}");
@@ -155,6 +158,7 @@ public class PlayerInventory : MonoBehaviour
         if (earnedMoneyText_overlay) earnedMoneyText_overlay.gameObject.SetActive(visible);
         if (targetMoneyText_overlay) targetMoneyText_overlay.gameObject.SetActive(visible);
         if (actualMoneyInInventory_overlay) actualMoneyInInventory_overlay.gameObject.SetActive(visible);
+        if (minimap) minimap.SetActive(visible);
     }
 
 }
