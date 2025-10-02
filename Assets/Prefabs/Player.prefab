@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 186625654098382676}
   - component: {fileID: 6940194744154410814}
   - component: {fileID: -6037919788179486070}
+  - component: {fileID: 3182237442666596967}
   m_Layer: 3
   m_Name: Player
   m_TagString: Player
@@ -33,8 +34,8 @@ Transform:
   m_GameObject: {fileID: 959361971909193939}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.7926195, y: 1.7926195, z: 1.7926195}
+  m_LocalPosition: {x: 4.8831, y: 3.63, z: 6}
+  m_LocalScale: {x: 3.21629, y: 3.21629, z: 3.21629}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 111961103368930814}
@@ -107,7 +108,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 1
+  m_Mass: 9
   m_LinearDamping: 0
   m_AngularDamping: 0.05
   m_GravityScale: 1
@@ -121,7 +122,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 1
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!114 &804792739680659552
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -134,19 +135,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: acaf0c0320529cb479d7e6c178cf3939, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: {fileID: 0}
+  health: {fileID: -6037919788179486070}
   gameOverSceneName: GameOverScene
   gameOverDelay: 0.25
-  moveSpeed: 7
+  moveSpeed: 8
   swimSpeed: 13
-  accelInWater: 4
+  accelInWater: 6
   swimAnimThreshold: 0.1
   carriedWeight: 0
-  weightImpactFactor: 0.1
-  harpoonPrefab: {fileID: 0}
-  harpoonSpawnPoint: {fileID: 0}
-  harpoonSpeed: 10
-  harpoonCooldown: 0.5
+  weightImpactFactor: 0.2
   waterDrag: 2
   normalDrag: 0
   buoyancyK: 8
@@ -155,6 +152,8 @@ MonoBehaviour:
   sinkDuration: 1
   initialSinkForce: 10
   buoyancyRampTime: 1
+  inventoryMenu: {fileID: 0}
+  firstMenuButton: {fileID: 0}
 --- !u!114 &-7509507574921182367
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -198,25 +197,9 @@ MonoBehaviour:
     m_ActionName: 'Player/Move[/Keyboard/w,/Keyboard/s,/Keyboard/a,/Keyboard/d]'
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: 
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-    m_ActionId: cfccd415-d3bf-42f5-8f91-45d5e8844f63
-    m_ActionName: 'Player/Interaction[/Keyboard/e]'
-  - m_PersistentCalls:
-      m_Calls:
       - m_Target: {fileID: 804792739680659552}
         m_TargetAssemblyTypeName: PlayerBehaviour, Assembly-CSharp
-        m_MethodName: OnFireHarpoon
+        m_MethodName: OnInteract
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -226,8 +209,52 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_ActionId: e159065d-7727-4f95-b514-b153f1a744d0
-    m_ActionName: 'Player/Attack[/Mouse/leftButton,/Keyboard/space]'
+    m_ActionId: cfccd415-d3bf-42f5-8f91-45d5e8844f63
+    m_ActionName: 'Player/Interaction[/Keyboard/e]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 177f40cc-2608-49f6-b89a-229323fc9be0
+    m_ActionName: 'Player/OpenSellMenu[/XInputControllerWindows/buttonWest,/Keyboard/i]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: ab99de14-f003-4f85-aa18-330ce1953a95
+    m_ActionName: 'UI/Navigate[/XInputControllerWindows/leftStick/up,/XInputControllerWindows/rightStick/up,/XInputControllerWindows/leftStick/down,/XInputControllerWindows/rightStick/down,/XInputControllerWindows/leftStick/left,/XInputControllerWindows/rightStick/left,/XInputControllerWindows/leftStick/right,/XInputControllerWindows/rightStick/right,/XInputControllerWindows/dpad,/Keyboard/w,/Keyboard/upArrow,/Keyboard/s,/Keyboard/downArrow,/Keyboard/a,/Keyboard/leftArrow,/Keyboard/d,/Keyboard/rightArrow]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 285a3706-1949-4c82-93ca-4b2a000e3baa
+    m_ActionName: 'UI/Submit[/XInputControllerWindows/buttonSouth]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 2b33c130-99c1-4d05-a4af-5aaede9a3ba8
+    m_ActionName: 'UI/Cancel[/XInputControllerWindows/buttonEast]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: d74dfbb2-8bc2-4d2f-8fbd-970c0a168a4f
+    m_ActionName: 'UI/Point[/Mouse/position]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: e78f1345-99dc-4fff-8c2d-e3113bf0dbb2
+    m_ActionName: 'UI/Click[/Mouse/leftButton]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 13e383d5-e62f-4aae-a6e2-12f7b3b717ac
+    m_ActionName: 'UI/ScrollWheel[/Mouse/scroll]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 3c805424-c3d8-4182-bdcb-18614d0c996e
+    m_ActionName: 'UI/MiddleClick[/Mouse/middleButton]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: cfda554a-3957-4dfb-9afa-5ffb33fda646
+    m_ActionName: 'UI/RightClick[/Mouse/rightButton]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 47b58f87-27d2-42f2-9f6b-3d3c7da897c5
+    m_ActionName: UI/TrackedDevicePosition
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 9e9b68fd-d5ed-4a8f-82de-6ca0ca846d73
+    m_ActionName: UI/TrackedDeviceOrientation
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
@@ -240,7 +267,7 @@ BoxCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 959361971909193939}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Density: 1
   m_Material: {fileID: 0}
@@ -267,7 +294,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: -0.0016910434, y: 0.0054495633}
+  m_Offset: {x: -0.0016910434, y: 0.012459129}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -277,7 +304,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 0.59364426, y: 1.5736101}
+  m_Size: {x: 0.59364426, y: 1.5876293}
   m_EdgeRadius: 0
 --- !u!114 &186625654098382676
 MonoBehaviour:
@@ -295,17 +322,19 @@ MonoBehaviour:
   forzieriCollected: 0
   cristalliCollected: 0
   spadeCollected: 0
-  legnoCollected: 0
+  variCollected: 0
+  targetMoney: 50000
   soldiText: {fileID: 0}
   forzieriText: {fileID: 0}
   cristalliText: {fileID: 0}
   spadeText: {fileID: 0}
-  legnoText: {fileID: 0}
+  variText: {fileID: 0}
   earnedMoneyText: {fileID: 0}
   earnedMoneyText_overlay: {fileID: 0}
   targetMoneyText_overlay: {fileID: 0}
   actualMoneyInInventory_overlay: {fileID: 0}
   vendiButton: {fileID: 0}
+  minimap: {fileID: 0}
 --- !u!95 &6940194744154410814
 Animator:
   serializedVersion: 7
@@ -341,6 +370,87 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 5
+  healthText: {fileID: 0}
+  lostText: {fileID: 0}
+  p_i: {fileID: 186625654098382676}
+  p_b: {fileID: 0}
+  damageAmount: 0
+--- !u!60 &3182237442666596967
+PolygonCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 959361971909193939}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 0.6, y: 1.59}
+    newSize: {x: 1, y: 1}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 1
+  m_Points:
+    m_Paths:
+    - - {x: 0, y: -0.565}
+      - {x: 0.02, y: -0.755}
+      - {x: 0.06, y: -0.79499996}
+      - {x: 0.28, y: -0.79499996}
+      - {x: 0.29999998, y: -0.775}
+      - {x: 0.29999998, y: -0.72499996}
+      - {x: 0.21, y: -0.635}
+      - {x: 0.21, y: -0.315}
+      - {x: 0.29999998, y: -0.21499999}
+      - {x: 0.29999998, y: 0.13499999}
+      - {x: 0.28, y: 0.405}
+      - {x: 0.17999999, y: 0.53499997}
+      - {x: 0.14999999, y: 0.675}
+      - {x: 0.13, y: 0.755}
+      - {x: 0.06, y: 0.79499996}
+      - {x: -0.099999994, y: 0.79499996}
+      - {x: -0.19, y: 0.685}
+      - {x: -0.16, y: 0.615}
+      - {x: -0.29, y: 0.405}
+      - {x: -0.29999998, y: 0.105}
+      - {x: -0.29999998, y: -0.055}
+      - {x: -0.29, y: -0.205}
+      - {x: -0.25, y: -0.24499999}
+      - {x: -0.29999998, y: -0.565}
+      - {x: -0.29999998, y: -0.79499996}
+      - {x: -0.16, y: -0.79499996}
+      - {x: -0.11, y: -0.765}
+      - {x: -0.06, y: -0.445}
+      - {x: 0, y: -0.305}
+  m_UseDelaunayMesh: 0
 --- !u!1 &8897409919148464682
 GameObject:
   m_ObjectHideFlags: 0
@@ -410,7 +520,7 @@ Camera:
   far clip plane: 1000
   field of view: 34
   orthographic: 1
-  orthographic size: 10
+  orthographic size: 12
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2

@@ -137,6 +137,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 03b1fb29b22322849a083eafbb1655b8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  weight: 10
+  weight: 15
   value: 400
   destroyedCrystal: {fileID: 0}

@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
@@ -21,13 +22,6 @@ public class PlayerBehaviour : MonoBehaviour
     [SerializeField] private float carriedWeight = 0f;
     [SerializeField] private float weightImpactFactor = 1f; // Quanto il peso influisce sulla velocità
 
-    [Header("Fiocina")]
-    [SerializeField] private GameObject harpoonPrefab;
-    [SerializeField] private Transform harpoonSpawnPoint;
-    [SerializeField] private float harpoonSpeed = 10f;
-    [SerializeField] private float harpoonCooldown = 1f;
-    private float lastHarpoonTime = -Mathf.Infinity;
-
     [Header("Fisica acqua")]
     [SerializeField] private float waterDrag = 3f;
     [SerializeField] private float normalDrag = 0f;
@@ -47,22 +41,28 @@ public class PlayerBehaviour : MonoBehaviour
     [SerializeField] private float buoyancyRampTime = 0.8f;
 
     private Vector2 moveInput;
+
+    [Header("Menu Inventario")]
+    [SerializeField] private GameObject inventoryMenu;
+    [SerializeField] private GameObject firstMenuButton;
+
+    private bool isInteracting = false;
     private bool isInWater = false;
     private bool isSinking = false;
     private float sinkTimer = 0f;
     private float buoyancyT = 0f;
     private float waterSurfaceY = Mathf.NegativeInfinity;
+    private float angle = 30f; // angolo di rotazione in acqua   
     private Collider2D currentWaterTrigger;
     private Rigidbody2D rb;
     private Animator animator;
     private SpriteRenderer spriteRenderer;
-
-    private BoxCollider2D boxCollider;
+    private PolygonCollider2D boxCollider;
 
 
     private void Start()
     {
-        boxCollider = GetComponent<BoxCollider2D>();
+        boxCollider = GetComponent<PolygonCollider2D>();
         if (boxCollider == null)
         {
             Debug.LogWarning("BoxCollider2D non trovato sul giocatore. Aggiungilo per un rilevamento corretto dell'acqua.");
@@ -77,6 +77,30 @@ public class PlayerBehaviour : MonoBehaviour
         // if (context.performed) Debug.Log($"Move: {moveInput}");
     }
 
+    public void OnInteract(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            isInteracting = true;
+            // Debug.Log("Interagisci");
+            // Esempio: apri un menu, raccogli un oggetto, parla con NPC, ecc.
+            var interactables = Physics2D.OverlapBoxAll(transform.position, new Vector2(1f, 1f), 0f);
+            foreach (var col in interactables)
+            {
+                var interactable = col.GetComponent<Collectible>();
+                if (interactable != null)
+                {
+                    interactable.CollectItem();
+                    break; // Interagisci con il primo trovato
+                }
+            }
+        }
+        else if (context.canceled)
+        {
+            isInteracting = false;
+        }
+    }
+
     void Awake()
     {
 
@@ -87,7 +111,6 @@ public class PlayerBehaviour : MonoBehaviour
 
 
         if (health == null) health = GetComponent<PlayerHealth>();
-        if (health == null) health = GetComponentInChildren<PlayerHealth>();
 
     }
 
@@ -106,6 +129,15 @@ public class PlayerBehaviour : MonoBehaviour
             float adjustedSwimSpeed = Mathf.Max(0.5f, swimSpeed - carriedWeight * weightImpactFactor);
             Vector2 targetVel = moveInput * adjustedSwimSpeed;
             rb.linearVelocity = Vector2.Lerp(rb.linearVelocity, targetVel, accelInWater * Time.fixedDeltaTime);
+
+            /*
+            if(moveInput.x > 0.1f && moveInput.y >0.1f)
+                transform.rotation = Quaternion.Euler(0f, 0f, -angle);
+            else if(moveInput.x < -0.1f && moveInput.y > 0.1f)
+                transform.rotation = Quaternion.Euler(0f, 0f, angle);
+            */
+
+
 
 
             // --- Affondamento -> galleggiamento ---
@@ -178,41 +210,6 @@ public class PlayerBehaviour : MonoBehaviour
         Debug.Log($"Peso totale trasportato: {carriedWeight}");
     }
 
-    [System.Obsolete]
-    private void FireHarpoon()
-    {
-        if (Time.time - lastHarpoonTime < harpoonCooldown)
-            return; // Ancora in cooldown
-
-        lastHarpoonTime = Time.time;
-
-        if (harpoonPrefab != null && harpoonSpawnPoint != null)
-        {
-            Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
-            Vector2 direction = (mouseWorldPos - harpoonSpawnPoint.position).normalized;
-
-            GameObject harpoon = Instantiate(harpoonPrefab, harpoonSpawnPoint.position, Quaternion.identity);
-
-            float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-            harpoon.transform.rotation = Quaternion.Euler(0, 0, angle);
-
-            Rigidbody2D rb = harpoon.GetComponent<Rigidbody2D>();
-            if (rb != null)
-            {
-                rb.velocity = direction * harpoonSpeed;
-            }
-        }
-    }
-
-    [System.Obsolete]
-    public void OnFireHarpoon(InputAction.CallbackContext context)
-    {
-        if (context.performed)
-        {
-            FireHarpoon();
-        }
-    }
-
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.gameObject.layer == LayerMask.NameToLayer("Water"))
@@ -223,6 +220,8 @@ public class PlayerBehaviour : MonoBehaviour
             buoyancyT = 0f;
             currentWaterTrigger = other;
         }
+
+
 
     }
 
@@ -245,6 +244,7 @@ public class PlayerBehaviour : MonoBehaviour
 
     void OnEnable()
     {
+
         if (health != null)
         {
             health.OnDied += HandleDeath;
@@ -255,6 +255,7 @@ public class PlayerBehaviour : MonoBehaviour
 
     void OnDisable()
     {
+
         if (health != null)
         {
             health.OnDied -= HandleDeath;
@@ -281,14 +282,5 @@ public class PlayerBehaviour : MonoBehaviour
     {
         yield return new WaitForSeconds(gameOverDelay);
         SceneManager.LoadScene(gameOverSceneName);
-    }
-
-    public void OnInteract(InputAction.CallbackContext context)
-    {
-        // Specify the type argument for ReadValue<TValue>()
-        // For a Button, you typically want to read a bool value (pressed or not)
-        bool isPressed = context.ReadValue<bool>();
-        // You can use isPressed to trigger interaction logic if needed
-        // Example: if (isPressed) { /* handle interaction */ }
     }
 }

@@ -13,8 +13,6 @@ public class Collectible : MonoBehaviour
     [SerializeField] private Sprite destroyedCrystal; // Assegna lo sprite finale del cristallo da Inspector
 
     PlayerInventory playerInventory;
-   
-
 
     void Awake()
     {
@@ -26,6 +24,8 @@ public class Collectible : MonoBehaviour
     {
         if (other.CompareTag("Player"))
             isPlayerNearby = true;
+        
+           
     }
 
     void OnTriggerExit2D(Collider2D other)
@@ -34,16 +34,16 @@ public class Collectible : MonoBehaviour
             isPlayerNearby = false;
     }
 
-    void Update()
+    public void CollectItem()
     {
-        if (isPlayerNearby && !isCollected && Keyboard.current.eKey.wasPressedThisFrame)
+        if (isPlayerNearby && !isCollected)
         {
             isCollected = true;
 
             // Avvia l'animazione di raccolta
             if (animator != null && this.CompareTag("Cristallo"))
             {
-               
+
                 animator.SetTrigger("break");
                 SpriteRenderer sr = GetComponent<SpriteRenderer>();
                 if (sr != null && destroyedCrystal != null)
@@ -85,13 +85,13 @@ public class Collectible : MonoBehaviour
         double target = playerInventory.targetMoney;
 
         if (this.CompareTag("Forziere"))
-            value = target * 0.4;
+            value = target * 0.15;
         else if (this.CompareTag("Cristallo"))
-            value = target * 0.19;
+            value = target * 0.1;
         else if (this.CompareTag("Spada"))
-            value = target * 0.75;
-        else if (this.CompareTag("Legno"))
-            value = target * 0.02; 
-        return value;
+            value = target * 0.5;
+        else if (this.CompareTag("Vari"))
+            value = target * 0.02;
+            return value;
     }
 }

@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 8427304318584505731}
   - component: {fileID: 413786488953997058}
   - component: {fileID: -1264393480962772208}
+  - component: {fileID: -3819880304997934853}
   m_Layer: 11
   m_Name: Shark
   m_TagString: Shark
@@ -125,7 +126,7 @@ BoxCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1822650914494787764}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Density: 1
   m_Material: {fileID: 0}
@@ -183,12 +184,12 @@ MonoBehaviour:
   obstacleMask:
     serializedVersion: 2
     m_Bits: 64
-  scanInterval: 0.1
-  chaseSpeed: 12
-  patrolSpeed: 9
-  acceleration: 10
-  rotateSmooth: 12
-  waterDrag: 1.5
+  scanInterval: 0.2
+  chaseSpeed: 13
+  patrolSpeed: 10
+  acceleration: 9
+  rotateSmooth: 15
+  waterDrag: 1.6
   velocityEps: 0.01
   useGeneratedLine: 1
   lineDirection: {x: 1, y: 0}
@@ -200,8 +201,8 @@ MonoBehaviour:
   waterArea: {fileID: 0}
   waterPadding: 0.2
   requirePlayerInWater: 1
-  contactDamage: 5
-  contactCooldown: 1
+  contactDamage: 1
+  contactCooldown: 2
   damageOnlyWhenChasing: 1
   debugContactLogs: 0
   turnOnLayers:
@@ -235,3 +236,69 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!60 &-3819880304997934853
+PolygonCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1822650914494787764}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 0.83, y: 0.48}
+    newSize: {x: 1, y: 1}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Points:
+    m_Paths:
+    - - {x: 0.415, y: 0.049999997}
+      - {x: 0.39499998, y: 0.099999994}
+      - {x: 0.005, y: 0.16}
+      - {x: -0.095, y: 0.24}
+      - {x: -0.185, y: 0.24}
+      - {x: -0.205, y: 0.22999999}
+      - {x: -0.175, y: 0.099999994}
+      - {x: -0.355, y: 0.14}
+      - {x: -0.415, y: 0.12}
+      - {x: -0.415, y: 0.04}
+      - {x: -0.385, y: -0.07}
+      - {x: -0.415, y: -0.099999994}
+      - {x: -0.415, y: -0.24}
+      - {x: -0.235, y: -0.19999999}
+      - {x: -0.205, y: -0.24}
+      - {x: -0.035, y: -0.24}
+      - {x: 0.065, y: -0.22}
+      - {x: 0.275, y: -0.17999999}
+      - {x: 0.415, y: -0.07}
+  m_UseDelaunayMesh: 0

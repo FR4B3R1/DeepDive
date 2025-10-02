@@ -3,6 +3,7 @@ using TMPro;
 using UnityEngine.UI;
 using System.Globalization;
 using UnityEngine.SceneManagement;
+using Unity.VisualScripting;
 
 public class PlayerInventory : MonoBehaviour
 {
@@ -11,7 +12,7 @@ public class PlayerInventory : MonoBehaviour
     public int forzieriCollected = 0;
     public int cristalliCollected = 0;
     public int spadeCollected = 0;
-    public int legnoCollected = 0;
+    public int variCollected = 0;
     private double earnedMoney = 0;      // Denaro effettivamente guadagnato (persistente)
     public int targetMoney = 50000;    // Obiettivo di denaro per vincere
 
@@ -20,14 +21,14 @@ public class PlayerInventory : MonoBehaviour
     [SerializeField] private TMP_Text forzieriText;
     [SerializeField] private TMP_Text cristalliText;
     [SerializeField] private TMP_Text spadeText;
-    [SerializeField] private TMP_Text legnoText;
+    [SerializeField] private TMP_Text variText;
     [SerializeField] private TMP_Text earnedMoneyText;  // <<< NUOVO: mostra earnedMoney
 
     [SerializeField] private TMP_Text earnedMoneyText_overlay;      // mostra sempre glie arned money in overlay
     [SerializeField] private TMP_Text targetMoneyText_overlay;      // mostra il target money in overlay
     [SerializeField] private TMP_Text actualMoneyInInventory_overlay; // mostra il current money in overlay
 
-    [Header("Riferimenti UI")]
+    [Header("Riferimenti")]
     [SerializeField] private Button vendiButton;        // <<< Opzionale: assegna il tuo bottone "Vendi"
     [SerializeField] private GameObject minimap;    // riferimento alla minimappa
 
@@ -55,7 +56,7 @@ public class PlayerInventory : MonoBehaviour
         forzieriCollected = 0;
         cristalliCollected = 0;
         spadeCollected = 0;
-        legnoCollected = 0;
+        variCollected = 0;
 
 
         actualMoneyInInventory_overlay.text = $"In Inventory:  0";
@@ -84,7 +85,7 @@ public class PlayerInventory : MonoBehaviour
         if (other.CompareTag("Forziere")) forzieriCollected++;
         else if (other.CompareTag("Cristallo")) cristalliCollected++;
         else if (other.CompareTag("Spada")) spadeCollected++;
-        else if (other.CompareTag("Legno")) legnoCollected++;
+        else if (other.CompareTag("Vari")) variCollected++;
 
         AggiornaUI();
     }
@@ -110,7 +111,7 @@ public class PlayerInventory : MonoBehaviour
         forzieriCollected = 0;
         cristalliCollected = 0;
         spadeCollected = 0;
-        legnoCollected = 0;
+        variCollected = 0;
 
         // Aggiorna SUBITO la UI
         AggiornaUI();
@@ -128,6 +129,12 @@ public class PlayerInventory : MonoBehaviour
 
         }
 
+        PlayerHealth health = GetComponent<PlayerHealth>();
+        if (health != null)
+        {
+            health.damageAmount = 0; // Resetta i danni consecutivi subiti
+        }
+
         Debug.Log($"Totale venduto: {earnedMoney}");
     }
 
@@ -137,19 +144,19 @@ public class PlayerInventory : MonoBehaviour
         forzieriCollected = 0;
         cristalliCollected = 0;
         spadeCollected = 0;
-        legnoCollected = 0;
+        variCollected = 0;
         earnedMoney = 0;
         AggiornaUI();
     }
 
     private void AggiornaUI()
     {
-        if (soldiText) soldiText.text = $"Valore Oggetti: {currentMoney}";  
-        if (forzieriText) forzieriText.text = $"Forzieri: {forzieriCollected}";
-        if (cristalliText) cristalliText.text = $"Cristalli: {cristalliCollected}";
-        if (spadeText) spadeText.text = $"Spade: {spadeCollected}";
-        if (legnoText) legnoText.text = $"Legno: {legnoCollected}";
-        if (earnedMoneyText) earnedMoneyText.text = $"Totale Guadagnato: {earnedMoney}";
+        if (soldiText) soldiText.text = $"{currentMoney}";  
+        if (forzieriText) forzieriText.text = $"Chests: {forzieriCollected}";
+        if (cristalliText) cristalliText.text = $"Crystals: {cristalliCollected}";
+        if (spadeText) spadeText.text = $"Sword: {spadeCollected}";
+        if (variText) variText.text = $"Various: {variCollected}";
+        if (earnedMoneyText) earnedMoneyText.text = $"Total Earned: {earnedMoney}";
         if (actualMoneyInInventory_overlay) actualMoneyInInventory_overlay.text = $"In Inventory: {currentMoney}";
     }
 

@@ -1,21 +1,24 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 
 public class PauseMenu : MonoBehaviour
 {
     [SerializeField] private GameObject pauseMenu;
     [SerializeField] private GameObject playerInventory;
+    [SerializeField] private GameObject firstPauseButton;
     [SerializeField] private GameObject minimap;
 
     private bool isPaused;
     private bool isOverlayVisible = true;
-    private bool isMinimapVisible = true; 
+    private bool isMinimapVisible = true;
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.JoystickButton7))
             TogglePause();
     }
+
 
     public void TogglePause()
     {
@@ -39,7 +42,12 @@ public class PauseMenu : MonoBehaviour
         if (pauseMenu != null)
             pauseMenu.SetActive(pause);
 
-        
+        if (pause)
+        {
+            // Seleziona il primo pulsante per navigazione con gamepad
+            EventSystem.current.SetSelectedGameObject(null);
+            EventSystem.current.SetSelectedGameObject(firstPauseButton);
+        }
     }
 
     public void ReturnToMainMenu()
