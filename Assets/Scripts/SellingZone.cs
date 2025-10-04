@@ -8,7 +8,7 @@ public class SellMenu : MonoBehaviour
     [Header("Riferimenti")]
     [SerializeField] private GameObject menuRoot;     // Assegna qui il pannello/menu da mostrare
     [SerializeField] private PlayerBehaviour player;   // Riferimento allo script del giocatore
-    [SerializeField] private PlayerInventory playerInventory;
+    [SerializeField] private GameObject gameUI;
     [SerializeField] private GameObject minimap;
     [SerializeField] private GameObject firstSellButton; // primo pulsante da selezionare
     [SerializeField] private PlayerInput PlayerInput;
@@ -86,7 +86,7 @@ public class SellMenu : MonoBehaviour
         isOpen = true;
         if (menuRoot != null) menuRoot.SetActive(true);
 
-        // playerInventory?.SetActive(false);
+        gameUI?.SetActive(false);
         minimap?.SetActive(false);
 
         Time.timeScale = 0f;
@@ -106,7 +106,7 @@ public class SellMenu : MonoBehaviour
         isOpen = false;
         if (menuRoot != null) menuRoot.SetActive(false);
 
-        // playerInventory?.SetActive(true);
+        gameUI?.SetActive(true);
         minimap?.SetActive(true);
 
         

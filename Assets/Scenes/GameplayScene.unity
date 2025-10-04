@@ -100408,7 +100408,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   menuRoot: {fileID: 28802232}
   player: {fileID: 6154866759756611692}
-  playerInventory: {fileID: 1411661514}
+  gameUI: {fileID: 1006626389}
   minimap: {fileID: 1921391965}
   firstSellButton: {fileID: 292594835}
   PlayerInput: {fileID: 6154866759756611710}
